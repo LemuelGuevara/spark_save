@@ -41,26 +41,26 @@ class TransactionDetails extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Container(
-                    width: 50,
-                    height: 50,
+                    width: 80,
+                    height: 80,
                     decoration: BoxDecoration(
-                      color: Colors.blue,
+                      color: Colors.grey.shade200,
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
-                      Icons.check,
-                      color: Colors.white,
-                      size: 24,
+                      Icons.receipt_rounded,
+                      color: Colors.black,
+                      size: 40,
                     ),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   Text(
-                    '${transaction.type == "expense" ? "-" : "+"}₱${transaction.transactionAmount.toStringAsFixed(2)}',
+                    '${transaction.type.toLowerCase() == "expense" ? "-" : "+"}₱${transaction.transactionAmount.toStringAsFixed(2)}',
                     style: TextStyle(
                       fontSize: 38,
-                      color: transaction.type == "expense"
+                      color: transaction.type.toLowerCase() == "expense"
                           ? Colors.red
                           : Colors.green,
                       fontWeight: FontWeight.w900,
