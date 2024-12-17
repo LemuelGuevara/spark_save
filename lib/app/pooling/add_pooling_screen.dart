@@ -1,5 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:provider/provider.dart';
+import 'package:spark_save/app/pooling/widgets/pooling_form.dart';
+import 'package:spark_save/app_state.dart';
+import 'package:spark_save/models/pooling.dart';
 import 'package:spark_save/presentation/widgets/buttons/rounded_button.dart';
 import 'package:spark_save/presentation/widgets/inputs/form_input.dart';
 
@@ -13,6 +18,8 @@ class AddPoolingScreen extends StatefulWidget {
 class _AddPoolingScreenState extends State<AddPoolingScreen> {
   final TextEditingController _expenseNameFieldController =
       TextEditingController();
+  final TextEditingController _expenseCategoryFieldController =
+      TextEditingController();
   final TextEditingController _expenseAmountFieldController =
       TextEditingController();
   final TextEditingController _memberFieldController = TextEditingController();
@@ -20,7 +27,7 @@ class _AddPoolingScreenState extends State<AddPoolingScreen> {
   final _poolingFormKey = GlobalKey<FormState>();
   final _memberFormKey = GlobalKey<FormState>();
 
-  final List<String> _poolingMembers = [];
+  final List<PoolingMember> _poolingMembers = [];
 
   @override
   Widget build(BuildContext context) {
@@ -42,23 +49,11 @@ class _AddPoolingScreenState extends State<AddPoolingScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Form(
-                key: _poolingFormKey,
-                child: Column(
-                  spacing: 20,
-                  children: <Widget>[
-                    FormInput(
-                      label: 'Expense Name',
-                      hintText: 'e.g. Bowling 12/24',
-                      controller: _expenseNameFieldController,
-                    ),
-                    FormInput(
-                      label: 'Expense Amount',
-                      hintText: '0.00',
-                      controller: _expenseAmountFieldController,
-                    ),
-                  ],
-                ),
+              PoolingForm(
+                expenseNameController: _expenseNameFieldController,
+                categoryController: _expenseCategoryFieldController,
+                amountController: _expenseAmountFieldController,
+                formKey: _poolingFormKey,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,9 +69,7 @@ class _AddPoolingScreenState extends State<AddPoolingScreen> {
                     Column(
                       children: _poolingMembers.asMap().entries.map((entry) {
                         final int index = entry.key;
-                        final String member = entry.value;
-                        final TextEditingController memberController =
-                            TextEditingController(text: member);
+                        final PoolingMember member = entry.value;
 
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 6),
@@ -85,8 +78,10 @@ class _AddPoolingScreenState extends State<AddPoolingScreen> {
                             children: [
                               Expanded(
                                 child: FormInput(
-                                    hintText: member,
-                                    controller: memberController),
+                                  hintText: member.name,
+                                  controller:
+                                      TextEditingController(text: member.name),
+                                ),
                               ),
                               SizedBox(width: 10),
                               IconButton(
@@ -144,8 +139,14 @@ class _AddPoolingScreenState extends State<AddPoolingScreen> {
                                           .validate()) {
                                         setState(() {
                                           _poolingMembers.add(
-                                              _memberFieldController.text
-                                                  .trim());
+                                            PoolingMember(
+                                              id: UniqueKey().toString(),
+                                              name: _memberFieldController.text
+                                                  .trim(),
+                                              shareAmount: 0,
+                                              isPaid: false,
+                                            ),
+                                          );
                                           _memberFieldController.clear();
                                         });
                                         Navigator.pop(context);
@@ -176,7 +177,29 @@ class _AddPoolingScreenState extends State<AddPoolingScreen> {
         child: Padding(
           padding: EdgeInsets.all(20.0),
           child: RoundedButton(
-            onTap: () {},
+            onTap: () {
+              Pooling pooling = Pooling(
+                id: '',
+                expenseAmount:
+                    double.tryParse(_expenseAmountFieldController.text) ?? 0.00,
+                expenseName: _expenseNameFieldController.text,
+                date: Timestamp.now(),
+                category: _expenseCategoryFieldController.text,
+                status: 'Pending',
+                members: _poolingMembers,
+              );
+
+              final appState =
+                  Provider.of<ApplicationState>(context, listen: false);
+
+              appState.addPooling(pooling).then((_) {
+                Navigator.pop(context);
+              }).catchError(
+                (e) {
+                  print("Error adding pooling: $e");
+                },
+              );
+            },
             label: 'Add Pooling',
             backgroundColor: Colors.green.shade800,
             textColor: Colors.white,
