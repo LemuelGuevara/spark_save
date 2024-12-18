@@ -62,41 +62,53 @@ class _TransactionsListState extends State<TransactionsList> {
                   ),
                   ...groupedTransactions[date]!.map(
                     (transaction) {
-                      return ListTile(
-                        onTap: () {
-                          showCupertinoModalBottomSheet(
-                            expand: false,
-                            useRootNavigator: true,
-                            context: context,
-                            builder: (context) => TransactionDetails(
-                              transaction: transaction,
-                              date: date,
+                      return Card(
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          side: BorderSide(
+                            color: Colors.grey.shade200,
+                            width: 1,
+                          ),
+                        ),
+                        color: Colors.grey.shade50,
+                        child: ListTile(
+                          onTap: () {
+                            showCupertinoModalBottomSheet(
+                              duration: Duration(milliseconds: 200),
+                              expand: false,
+                              useRootNavigator: true,
+                              context: context,
+                              builder: (context) => TransactionDetails(
+                                transaction: transaction,
+                                date: date,
+                              ),
+                            );
+                          },
+                          leading: Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade100,
+                              shape: BoxShape.circle,
                             ),
-                          );
-                        },
-                        leading: Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade100,
-                            shape: BoxShape.circle,
+                            child: Icon(
+                              Icons.receipt_long_rounded,
+                              size: 24,
+                            ),
                           ),
-                          child: Icon(
-                            Icons.receipt_long_rounded,
-                            size: 24,
+                          title: Text(
+                            transaction.name,
+                            style: TextStyle(fontWeight: FontWeight.w700),
                           ),
-                        ),
-                        title: Text(
-                          transaction.name,
-                          style: TextStyle(fontWeight: FontWeight.w700),
-                        ),
-                        subtitle: Text(
-                          transaction.category,
-                          style: TextStyle(color: Colors.grey.shade700),
-                        ),
-                        trailing: Text(
-                          "₱${transaction.transactionAmount.toStringAsFixed(2)}",
-                          style: const TextStyle(fontSize: 16),
+                          subtitle: Text(
+                            transaction.category,
+                            style: TextStyle(color: Colors.grey.shade700),
+                          ),
+                          trailing: Text(
+                            "₱${transaction.transactionAmount.toStringAsFixed(2)}",
+                            style: const TextStyle(fontSize: 16),
+                          ),
                         ),
                       );
                     },

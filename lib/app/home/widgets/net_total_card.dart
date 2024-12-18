@@ -13,7 +13,7 @@ class NetTotalCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.all(16),
+      margin: const EdgeInsets.all(10),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16), 
         side: BorderSide(
@@ -22,7 +22,7 @@ class NetTotalCard extends StatelessWidget {
         ),
       ),
       elevation: 0, // No shadow
-      color: Colors.grey.shade100, 
+      color: Colors.grey.shade50, 
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

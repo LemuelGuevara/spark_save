@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:spark_save/app/home/add_transaction_screen.dart';
 import 'package:spark_save/app/home/home_screen.dart';
-import 'package:spark_save/app/pooling/split_screen.dart';
 import 'package:spark_save/core/drawer.dart';
+import 'package:spark_save/app/pooling/pooling_screen.dart';
 
 class AppRouter extends StatelessWidget {
   const AppRouter({super.key});
@@ -30,7 +30,7 @@ class AppRouter extends StatelessWidget {
       drawer: AppDrawer(),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(10.0),
           child: Obx(() => controller.screens[controller.selectedIndex.value]),
         ),
       ),
@@ -114,7 +114,7 @@ class AppRouterController extends GetxController {
   final screens = [
     const HomeScreen(),
     Container(color: Colors.purple),
-    const SplitScreen(),
+    PoolingScreen(),
     const ProfileScreen(),
   ];
 }
