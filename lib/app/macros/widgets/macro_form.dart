@@ -76,9 +76,14 @@ class _MacroFormState extends State<MacroForm> {
           ),
         ),
       ),
-      bottomNavigationBar: SafeArea(
+      bottomSheet: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(20.0),
+          padding: const EdgeInsets.only(
+            left: 20,
+            right: 20,
+            bottom: 40,
+            top: 10,
+          ),
           child: Column(
             spacing: 10,
             mainAxisSize: MainAxisSize.min,
@@ -114,8 +119,9 @@ class _MacroFormState extends State<MacroForm> {
                   }
                 },
                 label: widget.macro == null ? 'Add Macro' : 'Update Macro',
-                backgroundColor:
-                    widget.macro == null ? Colors.green : Colors.grey.shade300,
+                backgroundColor: widget.macro == null
+                    ? Colors.green.shade800
+                    : Colors.grey.shade300,
                 textColor: widget.macro == null ? Colors.white : Colors.black,
               ),
               if (widget.macro != null)
