@@ -48,7 +48,9 @@ class _TransactionsListState extends State<TransactionsList> {
                     alignment: Alignment.centerLeft,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 0.0, horizontal: 16.0),
+                        vertical: 0.0,
+                        horizontal: 10.0,
+                      ),
                       child: Text(
                         DateFormat('MMMM d, yyyy').format(
                           DateTime.parse(date),
@@ -64,13 +66,6 @@ class _TransactionsListState extends State<TransactionsList> {
                     (transaction) {
                       return Card(
                         elevation: 0,
-                        // shape: RoundedRectangleBorder(
-                        //   borderRadius: BorderRadius.circular(16),
-                        //   side: BorderSide(
-                        //     color: Colors.grey.shade200,
-                        //     width: 1,
-                        //   ),
-                        // ),
                         color: Colors.white,
                         child: ListTile(
                           onTap: () {
