@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:spark_save/app/home/add_transaction_screen.dart';
 import 'package:spark_save/app/home/home_screen.dart';
+import 'package:spark_save/core/drawer.dart';
 import 'package:spark_save/app/pooling/pooling_screen.dart';
 
 class AppRouter extends StatelessWidget {
@@ -26,6 +27,7 @@ class AppRouter extends StatelessWidget {
         ),
         centerTitle: false,
       ),
+      drawer: AppDrawer(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
