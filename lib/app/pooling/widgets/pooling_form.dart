@@ -145,33 +145,63 @@ class _PoolingFormState extends State<PoolingForm> {
                   RoundedButton(
                     onTap: () {
                       showCupertinoModalBottomSheet(
+                        isDismissible: false,
                         context: context,
-                        builder: (context) => SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.3,
-                          child: Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: SafeArea(
+                        builder: (context) => Padding(
+                          padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom,
+                          ),
+                          child: SafeArea(
+                            child: SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.6,
                               child: Scaffold(
-                                body: Column(
-                                  children: <Widget>[
-                                    Form(
-                                      key: _memberFormKey,
-                                      child: FormInput(
-                                        label: 'Name of Member',
-                                        hintText: 'e.g. John Doe',
-                                        controller: _memberFieldController,
-                                        validator: (value) {
-                                          if (value == null ||
-                                              value.trim().isEmpty) {
-                                            return 'Member name cannot be empty';
-                                          }
-                                          return null;
-                                        },
+                                appBar: AppBar(
+                                  automaticallyImplyLeading: false,
+                                  scrolledUnderElevation: 0.0,
+                                  title: Text("Add Member"),
+                                  centerTitle: false,
+                                  actions: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: IconButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                        icon: const Icon(Icons.close_rounded),
                                       ),
-                                    )
+                                    ),
                                   ],
                                 ),
-                                bottomNavigationBar: SafeArea(
+                                body: Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(20.0),
+                                    child: Form(
+                                      key: _memberFormKey,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          FormInput(
+                                            label: 'Name of Member',
+                                            hintText: 'e.g. John Doe',
+                                            controller: _memberFieldController,
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.trim().isEmpty) {
+                                                return 'Member name cannot be empty';
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                bottomNavigationBar: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0,
+                                    vertical: 10.0,
+                                  ),
                                   child: RoundedButton(
                                     onTap: () {
                                       if (_memberFormKey.currentState!
