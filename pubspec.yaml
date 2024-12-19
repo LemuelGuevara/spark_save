@@ -27,6 +27,7 @@ dependencies:
   google_sign_in: ^6.2.2
   firebase_ui_oauth_google: ^1.4.0
   date_picker_plus: ^4.1.0
+  flutter_animated_splash: ^0.0.10
 
 dev_dependencies:
   flutter_test:
