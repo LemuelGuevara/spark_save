@@ -98,6 +98,20 @@ class _PoolingCardState extends State<PoolingCard> {
                   ),
                   const SizedBox(height: 20),
                   Row(
+                    children: [
+                      Text(
+                        "Paid by: ",
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      Text(
+                        widget.pooling.payer,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
+                  ),
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(

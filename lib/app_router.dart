@@ -1,8 +1,9 @@
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:spark_save/app/home/add_transaction_screen.dart';
+import 'package:spark_save/app/home/widgets/transaction_form.dart';
 import 'package:spark_save/app/home/home_screen.dart';
+import 'package:spark_save/app/macros/macro_screen.dart';
 import 'package:spark_save/core/drawer.dart';
 import 'package:spark_save/app/pooling/pooling_screen.dart';
 
@@ -15,6 +16,7 @@ class AppRouter extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
         backgroundColor: Colors.white,
         title: Obx(
           () {
@@ -43,10 +45,10 @@ class AppRouter extends StatelessWidget {
           ),
           child: BottomAppBar(
             color: Colors.white,
-            elevation: 2,
+            elevation: 0,
             shape: const CircularNotchedRectangle(),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -60,7 +62,7 @@ class AppRouter extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (BuildContext context) =>
-                              const AddTransaction(),
+                              const TransactionForm(),
                         ),
                       );
                     },
@@ -113,8 +115,8 @@ class AppRouterController extends GetxController {
 
   final screens = [
     const HomeScreen(),
-    Container(color: Colors.purple),
-    PoolingScreen(),
+    const MacrosScreen(),
+    const PoolingScreen(),
     const ProfileScreen(),
   ];
 }

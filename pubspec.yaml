@@ -24,6 +24,9 @@ dependencies:
   modal_bottom_sheet: ^3.0.0
   accordion: ^2.6.0
   mobkit_dashed_border: ^0.0.7
+  google_sign_in: ^6.2.2
+  firebase_ui_oauth_google: ^1.4.0
+  date_picker_plus: ^4.1.0
 
 dev_dependencies:
   flutter_test:

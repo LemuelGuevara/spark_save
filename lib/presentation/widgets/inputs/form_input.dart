@@ -6,7 +6,7 @@ class FormInput extends StatefulWidget {
   final String? label;
   final bool? obscuredText;
   final TextInputType? keyboardType;
-  final String? Function(String?)? validator; // Accept validator function
+  final String? Function(String?)? validator;
 
   const FormInput({
     super.key,
@@ -15,7 +15,7 @@ class FormInput extends StatefulWidget {
     this.label,
     this.obscuredText,
     this.keyboardType,
-    this.validator, // Include validator
+    this.validator,
   });
 
   @override
@@ -55,7 +55,13 @@ class FormInputState extends State<FormInput> {
               borderRadius: BorderRadius.circular(20),
             ),
           ),
-          validator: widget.validator,
+          validator: widget.validator ??
+              (value) {
+                if (value == null || value.isEmpty) {
+                  return 'This field is required';
+                }
+                return null;
+              },
         ),
       ],
     );

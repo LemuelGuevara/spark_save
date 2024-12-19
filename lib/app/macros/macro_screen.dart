@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:mobkit_dashed_border/mobkit_dashed_border.dart';
 import 'package:provider/provider.dart';
-import 'package:spark_save/app/pooling/widgets/pooling_form.dart';
-import 'package:spark_save/app/pooling/widgets/pooling_list.dart';
+import 'package:spark_save/app/macros/widgets/macro_form.dart';
+import 'package:spark_save/app/macros/widgets/macro_list.dart';
 import 'package:spark_save/app_state.dart';
 import 'package:spark_save/presentation/widgets/buttons/add_item_button.dart';
 
-class PoolingScreen extends StatelessWidget {
-  const PoolingScreen({super.key});
+class MacrosScreen extends StatelessWidget {
+  const MacrosScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,13 +16,11 @@ class PoolingScreen extends StatelessWidget {
           child: Center(
             child: Column(
               spacing: 10,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                PoolingList(poolings: appState.poolings),
+                MacroList(macros: appState.macros),
                 AddItemButton(
-                  title: 'Add Pooling',
-                  redirectTo: const PoolingForm(),
+                  title: 'Add Macro',
+                  redirectTo: const MacroForm(),
                 ),
               ],
             ),

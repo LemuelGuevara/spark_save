@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Pooling {
   String id;
+  String payer;
   num expenseAmount;
   String expenseName;
   Timestamp date;
@@ -11,6 +12,7 @@ class Pooling {
 
   Pooling({
     required this.id,
+    required this.payer,
     required this.expenseAmount,
     required this.expenseName,
     required this.date,

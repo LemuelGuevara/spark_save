@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:date_picker_plus/date_picker_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_save/app_state.dart';
@@ -7,14 +8,16 @@ import 'package:spark_save/presentation/widgets/inputs/form_input.dart';
 import 'package:spark_save/presentation/widgets/inputs/rounded_tab_input.dart';
 import 'package:spark_save/models/transaction.dart';
 
-class AddTransaction extends StatefulWidget {
-  const AddTransaction({super.key});
+class TransactionForm extends StatefulWidget {
+  final TransactionModel? transaction;
+
+  const TransactionForm({super.key, this.transaction});
 
   @override
-  State<AddTransaction> createState() => _AddTransactionState();
+  State<TransactionForm> createState() => _TransactionFormState();
 }
 
-class _AddTransactionState extends State<AddTransaction>
+class _TransactionFormState extends State<TransactionForm>
     with SingleTickerProviderStateMixin {
   final TextEditingController _nameFieldController = TextEditingController();
   final TextEditingController _dateFieldController = TextEditingController();
@@ -34,6 +37,16 @@ class _AddTransactionState extends State<AddTransaction>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
 
+    if (widget.transaction != null) {
+      _nameFieldController.text = widget.transaction!.name;
+      _categoryFieldController.text = widget.transaction!.category;
+      _amountFieldController.text =
+          widget.transaction!.transactionAmount.toString();
+      selectedLabel = widget.transaction!.type;
+      _dateFieldController.text =
+          widget.transaction!.date.toDate().toString().split(' ')[0];
+    }
+
     _tabController.addListener(() {
       if (_tabController.indexIsChanging) {
         setState(() {
@@ -49,10 +62,31 @@ class _AddTransactionState extends State<AddTransaction>
     super.dispose();
   }
 
+  Future<void> _selectDate(BuildContext context) async {
+    DateTime initialDate = DateTime.now();
+    if (_dateFieldController.text.isNotEmpty) {
+      initialDate = DateTime.parse(_dateFieldController.text);
+    }
+
+    final DateTime? picked = await showDatePickerDialog(
+      context: context,
+      initialDate: initialDate,
+      minDate: DateTime(2000),
+      maxDate: DateTime(2101),
+    );
+
+    if (picked != null && picked != initialDate) {
+      setState(() {
+        _dateFieldController.text = "${picked.toLocal()}".split(' ')[0];
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(Icons.chevron_left_rounded),
@@ -66,7 +100,9 @@ class _AddTransactionState extends State<AddTransaction>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Add Transaction",
+                widget.transaction == null
+                    ? "Add Transaction"
+                    : "Edit Transaction",
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
               RoundedTabBar(
@@ -135,6 +171,22 @@ class _AddTransactionState extends State<AddTransaction>
                         return null;
                       },
                     ),
+                    GestureDetector(
+                      onTap: () => _selectDate(context),
+                      child: AbsorbPointer(
+                        child: FormInput(
+                          label: "Date",
+                          hintText: "Select Date",
+                          controller: _dateFieldController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Date cannot be empty';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -146,31 +198,46 @@ class _AddTransactionState extends State<AddTransaction>
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: RoundedButton(
-            label: "Submit",
+            label: widget.transaction == null
+                ? "Add Transaction"
+                : "Update Transaction",
             backgroundColor: Colors.green.shade800,
             textColor: Colors.white,
             onTap: () {
               if (_formKey.currentState!.validate()) {
                 final transaction = TransactionModel(
-                  id: '',
+                  id: widget.transaction?.id ?? '',
                   name: _nameFieldController.text,
                   category: _categoryFieldController.text,
                   transactionAmount:
                       double.tryParse(_amountFieldController.text) ?? 0.0,
                   type: selectedLabel,
-                  date: Timestamp.now(),
+                  date: Timestamp.fromDate(
+                      DateTime.parse(_dateFieldController.text)),
                 );
 
                 final appState =
                     Provider.of<ApplicationState>(context, listen: false);
 
-                appState.addTransaction(transaction).then((_) {
-                  Navigator.pop(context);
-                }).catchError(
-                  (e) {
-                    print("Error adding transaction: $e");
-                  },
-                );
+                if (widget.transaction == null) {
+                  // Add new transaction
+                  appState.addTransaction(transaction).then((_) {
+                    Navigator.pop(context);
+                  }).catchError(
+                    (e) {
+                      print("Error adding transaction: $e");
+                    },
+                  );
+                } else {
+                  // Edit existing transaction
+                  appState.updateTransaction(transaction).then((_) {
+                    Navigator.pop(context);
+                  }).catchError(
+                    (e) {
+                      print("Error updating transaction: $e");
+                    },
+                  );
+                }
               }
             },
           ),

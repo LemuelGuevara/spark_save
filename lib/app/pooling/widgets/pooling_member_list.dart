@@ -24,8 +24,10 @@ class PoolingMemberList extends StatelessWidget {
           ),
         ),
         color: Colors.grey.shade50,
-        child: SizedBox(
-          height: 220,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: 260.0, // Adjust as needed
+          ),
           child: ListView.builder(
             itemCount: poolingMembers.length,
             itemBuilder: (context, index) {

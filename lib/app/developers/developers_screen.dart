@@ -12,55 +12,61 @@ class DevelopersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Stack(
-            children: [
-              Container(
-                width: double.infinity,
-                height: 350,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('images/header.jpg'),
-                    fit: BoxFit.cover,
-                    alignment: Alignment.topCenter,
+      appBar: AppBar(
+        title:  Text("Developers"),
+        centerTitle: false,
+      ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Stack(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 350,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('images/header.jpg'),
+                      fit: BoxFit.cover,
+                      alignment: Alignment.topCenter,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(16.0),
-              itemCount: developers.length,
-              itemBuilder: (context, index) {
-                final developer = developers[index];
-
-                return Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircleAvatar(
-                        radius: MediaQuery.of(context).size.width * 0.2,
-                        backgroundImage: AssetImage(developer['image']!),
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        developer['name']!,
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                );
-              },
+              ],
             ),
-          ),
-        ],
+            Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.all(16.0),
+                itemCount: developers.length,
+                itemBuilder: (context, index) {
+                  final developer = developers[index];
+        
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircleAvatar(
+                          radius: MediaQuery.of(context).size.width * 0.2,
+                          backgroundImage: AssetImage(developer['image']!),
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          developer['name']!,
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

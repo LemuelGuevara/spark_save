@@ -1,41 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:spark_save/app/pooling/widgets/pooling_form.dart';
-import 'package:spark_save/app/pooling/widgets/pooling_member_list.dart';
+import 'package:spark_save/app/home/widgets/transaction_form.dart';
 import 'package:spark_save/app_state.dart';
 import 'package:spark_save/core/utils.dart';
-import 'package:spark_save/models/pooling.dart';
+import 'package:spark_save/models/transaction.dart';
 import 'package:spark_save/presentation/widgets/buttons/rounded_button.dart';
 import 'package:spark_save/presentation/widgets/row_key_value.dart';
 
-class PoolingDetails extends StatelessWidget {
-  final Pooling pooling;
+class TransactionDetails extends StatefulWidget {
+  final TransactionModel transaction;
 
-  const PoolingDetails({
+  const TransactionDetails({
     super.key,
-    required this.pooling,
+    required this.transaction,
   });
+
+  @override
+  _TransactionDetailsState createState() => _TransactionDetailsState();
+}
+
+class _TransactionDetailsState extends State<TransactionDetails> {
+  late Future<TransactionModel?> _transactionFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _transactionFuture = context
+        .read<ApplicationState>()
+        .retrieveTransactionById(widget.transaction.id);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<ApplicationState>(
       builder: (context, appState, _) {
-        return FutureBuilder<Pooling?>(
-          future: appState.retrievePoolingById(pooling.id),
+        return FutureBuilder<TransactionModel?>(
+          future: _transactionFuture,
           builder: (context, snapshot) {
-            print("pooling: ${snapshot}");
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (!snapshot.hasData) {
-              // Return an empty container or something else to avoid showing the "Pooling not found" error.
-              return Container();
+              return Center(child: Text('Transaction not found.'));
             } else {
-              final retrievedPooling = snapshot.data!;
+              final retrievedTransaction = snapshot.data!;
               final formattedDate = DateFormat('MMMM d, yyyy')
-                  .format(retrievedPooling.date.toDate());
+                  .format(retrievedTransaction.date.toDate());
 
               return SafeArea(
                 child: Scaffold(
@@ -52,7 +64,7 @@ class PoolingDetails extends StatelessWidget {
                     ],
                   ),
                   body: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 20),
                     child: Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -75,21 +87,24 @@ class PoolingDetails extends StatelessWidget {
                             height: 20,
                           ),
                           Text(
-                            formatCurrency(retrievedPooling.expenseAmount),
+                            '${retrievedTransaction.type.toLowerCase() == "expense" ? "-" : "+"}₱${retrievedTransaction.transactionAmount.toStringAsFixed(2)}',
                             style: TextStyle(
                               fontSize: 38,
-                              color: Colors.black,
+                              color: retrievedTransaction.type.toLowerCase() ==
+                                      "expense"
+                                  ? Colors.red
+                                  : Colors.green,
                               fontWeight: FontWeight.w900,
                             ),
                           ),
                           Text(
-                            retrievedPooling.category,
+                            retrievedTransaction.name,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          const SizedBox(
+                          SizedBox(
                             height: 20,
                           ),
                           Column(
@@ -101,16 +116,9 @@ class PoolingDetails extends StatelessWidget {
                               ),
                               RowKeyValue(
                                 rowKey: 'Category',
-                                rowValue: retrievedPooling.category,
+                                rowValue: retrievedTransaction.category,
                               ),
-                              RowKeyValue(
-                                rowKey: 'Payer',
-                                rowValue: retrievedPooling.payer,
-                              )
                             ],
-                          ),
-                          PoolingMemberList(
-                            poolingMembers: retrievedPooling.members,
                           ),
                         ],
                       ),
@@ -118,7 +126,7 @@ class PoolingDetails extends StatelessWidget {
                   ),
                   bottomNavigationBar: SafeArea(
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      padding: EdgeInsets.all(20),
                       child: Column(
                         spacing: 10,
                         mainAxisSize: MainAxisSize.min,
@@ -130,11 +138,12 @@ class PoolingDetails extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      PoolingForm(pooling: retrievedPooling),
+                                      TransactionForm(
+                                          transaction: retrievedTransaction),
                                 ),
                               );
                             },
-                            label: "Edit Pooling",
+                            label: "Edit Transaction",
                             backgroundColor: Colors.grey.shade100,
                             textColor: Colors.black87,
                           ),
@@ -142,14 +151,15 @@ class PoolingDetails extends StatelessWidget {
                             onTap: () {
                               appState
                                   .deleteDocument(
-                                      retrievedPooling.id, "poolings")
+                                      retrievedTransaction.id, "transactions")
                                   .then((_) {
-                                Navigator.pop(context);
+                                Navigator.pop(
+                                    context); 
                               }).catchError((e) {
-                                print("Error deleting pooling: $e");
+                                print("Error deleting transaction: $e");
                               });
                             },
-                            label: "Delete Pooling",
+                            label: "Delete Transaction",
                             backgroundColor: Colors.red,
                             textColor: Colors.white,
                           ),
