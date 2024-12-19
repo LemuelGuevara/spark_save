@@ -30,7 +30,6 @@ class PoolingDetails extends StatelessWidget {
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (!snapshot.hasData) {
-              // Return an empty container or something else to avoid showing the "Pooling not found" error.
               return Container();
             } else {
               final retrievedPooling = snapshot.data!;
@@ -109,8 +108,13 @@ class PoolingDetails extends StatelessWidget {
                               )
                             ],
                           ),
-                          PoolingMemberList(
-                            poolingMembers: retrievedPooling.members,
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Flexible(
+                            child: PoolingMemberList(
+                              poolingMembers: retrievedPooling.members,
+                            ),
                           ),
                         ],
                       ),
@@ -118,7 +122,7 @@ class PoolingDetails extends StatelessWidget {
                   ),
                   bottomNavigationBar: SafeArea(
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      padding: EdgeInsets.symmetric(horizontal: 10),
                       child: Column(
                         spacing: 10,
                         mainAxisSize: MainAxisSize.min,
