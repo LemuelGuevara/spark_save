@@ -1,4 +1,4 @@
-package com.example.spark_save
+package com.sparksave.app.spark_save
 
 import io.flutter.embedding.android.FlutterActivity
 
