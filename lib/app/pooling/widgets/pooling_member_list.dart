@@ -50,11 +50,13 @@ class PoolingMemberList extends StatelessWidget {
                   style: TextStyle(color: Colors.grey.shade600),
                 ),
                 trailing: Badge(
-                  backgroundColor: Colors.green.withOpacity(0.2),
+                  backgroundColor: member.isPaid
+                      ? Colors.green.withOpacity(0.2)
+                      : Colors.red.withOpacity(0.2),
                   label: Padding(
                     padding: EdgeInsets.symmetric(vertical: 4, horizontal: 6),
                     child: Text(
-                      "Paid",
+                      member.isPaid ? "Paid" : "Pending",
                       style: TextStyle(fontSize: 14, color: Colors.black),
                     ),
                   ),

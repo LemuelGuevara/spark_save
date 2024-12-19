@@ -130,7 +130,8 @@ class ApplicationState extends ChangeNotifier {
             var memberData = document.data()['members'] as List<dynamic>;
             for (var member in memberData) {
               members.add(PoolingMember(
-                isPaid: member['isPaid'] as bool,
+                isPaid:
+                    member['isPaid'] != null ? member['isPaid'] as bool : false,
                 id: member['id'] as String,
                 name: member['member'] as String,
                 shareAmount: member['shareAmount'] as num,
