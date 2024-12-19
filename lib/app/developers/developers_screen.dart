@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class DevelopersScreen extends StatelessWidget {
   final List<Map<String, String>> developers = [
     {"name": "Enrique Marco C. Dela Vega", "image": "images/eco.jpg"},
-    {"name": "Lemuel John D. Guevara", "image": "images/lemuel.jpg"},
+    {"name": "Lemuel John D. Guevara", "image": "images/lemuel.jpeg"},
     {"name": "Jason Lloyd T. Rodriguez", "image": "images/jason.png"},
   ];
 
