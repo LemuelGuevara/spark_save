@@ -1,14 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:get/get.dart'; // Import GetX
-import 'package:spark_save/app/home/home_screen.dart';
+import 'package:get/get.dart';
 import 'package:spark_save/app/macros/widgets/macro_form.dart';
 import 'package:spark_save/app_state.dart';
 import 'package:spark_save/core/utils.dart';
 import 'package:spark_save/models/macro.dart';
 import 'package:spark_save/models/transaction.dart';
-import 'package:spark_save/app_router.dart'; // Import AppRouter
+import 'package:spark_save/app_router.dart';
 
 class MacroList extends StatelessWidget {
   final List<Macro> macros;

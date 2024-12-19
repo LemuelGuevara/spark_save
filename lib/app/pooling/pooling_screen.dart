@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobkit_dashed_border/mobkit_dashed_border.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_save/app/pooling/widgets/pooling_form.dart';
 import 'package:spark_save/app/pooling/widgets/pooling_list.dart';
