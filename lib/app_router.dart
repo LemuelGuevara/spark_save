@@ -48,7 +48,7 @@ class AppRouter extends StatelessWidget {
             elevation: 0,
             shape: const CircularNotchedRectangle(),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
+              padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 0.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
