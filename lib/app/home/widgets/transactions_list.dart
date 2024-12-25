@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:spark_save/app/home/transaction_details.dart';
+import 'package:spark_save/core/utils.dart';
 import 'package:spark_save/models/transaction.dart';
 import 'package:intl/intl.dart';
 
@@ -100,7 +101,9 @@ class _TransactionsListState extends State<TransactionsList> {
                             style: TextStyle(color: Colors.grey.shade700),
                           ),
                           trailing: Text(
-                            "₱${transaction.transactionAmount.toStringAsFixed(2)}",
+                            transaction.type.toLowerCase() == "expense"
+                                ? "-${formatCurrency(transaction.transactionAmount)}"
+                                : "+${formatCurrency(transaction.transactionAmount)}",
                             style: const TextStyle(fontSize: 16),
                           ),
                         ),
