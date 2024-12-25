@@ -7,7 +7,7 @@ import 'package:spark_save/models/transaction.dart';
 import 'package:spark_save/presentation/widgets/buttons/rounded_button.dart';
 import 'package:spark_save/presentation/widgets/row_key_value.dart';
 
-class TransactionDetails extends StatefulWidget {
+class TransactionDetails extends StatelessWidget {
   final TransactionModel transaction;
 
   const TransactionDetails({
@@ -16,33 +16,18 @@ class TransactionDetails extends StatefulWidget {
   });
 
   @override
-  _TransactionDetailsState createState() => _TransactionDetailsState();
-}
-
-class _TransactionDetailsState extends State<TransactionDetails> {
-  late Future<TransactionModel?> _transactionFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _transactionFuture = context
-        .read<ApplicationState>()
-        .retrieveTransactionById(widget.transaction.id);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Consumer<ApplicationState>(
       builder: (context, appState, _) {
         return FutureBuilder<TransactionModel?>(
-          future: _transactionFuture,
+          future: appState.retrieveTransactionById(transaction.id),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (!snapshot.hasData) {
-              return Center(child: Text('Transaction not found.'));
+              return Container();
             } else {
               final retrievedTransaction = snapshot.data!;
               final formattedDate = DateFormat('MMMM d, yyyy')
@@ -152,8 +137,7 @@ class _TransactionDetailsState extends State<TransactionDetails> {
                                   .deleteDocument(
                                       retrievedTransaction.id, "transactions")
                                   .then((_) {
-                                Navigator.pop(
-                                    context); 
+                                Navigator.pop(context);
                               }).catchError((e) {
                                 print("Error deleting transaction: $e");
                               });
